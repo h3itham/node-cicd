@@ -1,5 +1,8 @@
 pipeline {
     agent { label 'node-agent' }
+    environment {
+            DOCKERHUB_CREDENTIALS = credentials('dockerhub_id')
+        }
     
     stages{
         stage('Code'){
@@ -12,9 +15,7 @@ pipeline {
                 sh 'docker build . -t h3itham/node-cicd:latest'
             }
         }
-        environment {
-            DOCKERHUB_CREDENTIALS = credentials('dockerhub_id')
-        }
+       
         stage('Login') {
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
